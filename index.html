@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Add VTT Thumbnail Preview Dyanamically</title>
+    <link rel="stylesheet" type="text/css" href=" https://players.brightcove.net/videojs-thumbnails/videojs.thumbnails.css
+">
+
+  </head>
+  <body>
+    <video data-account="5575390690001"
+        data-player="default"
+        data-embed="default"
+        data-application-id
+        class="video-js"
+        controls>
+      </video>
+      <script src="//players.brightcove.net/5575390690001/default_default/index.min.js"></script>
+      <script src="https://players.brightcove.net/videojs-thumbnails/videojs.thumbnails.js"></script>
+
+      <script>
+      /**
+      * NOTE: The below code is just for purpose to show the demo which shows how we are loding the video source after initialization.
+      **/
+        var videoSource = getVideoSource("demo_video_id");
+
+        var playerInstance = videojs("vjs_video_3");
+
+        /**
+        * Here we are loading the video source as per response from the getVideoSource().
+        * AS we are loading the source, similary, we want to load the vtt thumbnail preview too for each video.
+        * As per the code available with https://github.com/brightcove/videojs-thumbnails/pull/27/commits/cb002eed57dd88f7bfcb2d0796711765df9df793
+        * the vtt file is added before initialization inside the video tag through <track kind="metadata" src="oceans.vtt"></track>
+        * But in our case we can't give static vtt file inside the video tag as our source are dynamic depending on the request video id.
+        */
+        if(playerInstance != undefined && playerInstance != null && videoSource != null) {
+          playerInstance.src({
+              src: videoSource.videoUrl,
+              type: videoSource.videoType
+          });
+          playerInstance.play();
+          //here we want to update the vtt file as per the response
+
+        }
+
+
+        /**
+        * @description The below function will use to get the video source dynamically
+        **/
+        function getVideoSource(vId) {
+          if(vId == undefined) {
+            return;
+          }
+          /**
+          * HERE ALL AJAX REQUEST THROUGh PROMISE WiLL OCCUR
+          * THEN WILL RETURN THE RESPONSE
+          **/
+          return {
+            videoUrl: "https://qa-photos-cdn.mytvstudio.com/projects/iNtuition/medialibrary/videos/186fed-000813f4977/BSG_178_UNIVERSAL_15s-348774__desktop.m3u8",
+            videoType: "application/x-mpegURL",
+            vttFile: "https://qa-photos-cdn.mytvstudio.com/projects/iNtuition/medialibrary/videos/186fed-000813f4977/BSG_178_UNIVERSAL_15s-348774-TrickMode-320x180.vtt",
+            vttBasePath: "https://qa-photos-cdn.mytvstudio.com/projects/iNtuition/medialibrary/videos/186fed-000813f4977"
+          }
+        }
+      </script
+  </body>
+</html>
